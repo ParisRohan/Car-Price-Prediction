@@ -4,7 +4,6 @@ import requests
 import pickle
 import numpy as np
 import sklearn
-from datetime import date
 app = Flask(__name__)
 model = pickle.load(open('carprice_xgb.pkl', 'rb'))
 print("Model Loaded")
@@ -14,7 +13,7 @@ def Home():
 
 
 @app.route("/predict", methods=['POST'])
-def predict():
+def predict():     
     
     if request.method == 'POST':
         
@@ -27,7 +26,7 @@ def predict():
  
         #Torque
         torque = int(request.form['torque'])       
-        
+            
         #seats
         seats = int(request.form['seats'])  
         
@@ -39,7 +38,7 @@ def predict():
         
         #Year in which the vehicle was bought
         year = int(request.form['year'])
-        Car_age = todays_date.year - year
+        Car_age = 2022 - year
                 
         #Vehicle owner
         owner=request.form['owner']
@@ -74,11 +73,19 @@ def predict():
             fuel_LPG=0
 
         #Seller type
-        seller_type_Individual=request.form['seller_type_Individual']
-        if(seller_type_Individual=='Individual'):
+        seller_type=request.form['seller_type']
+        if(seller_type=='Individual'):
             seller_type_Individual=1
+            seller_type_Trustmark_Dealer=0
+           
+        elif(seller_type=='Trustmark_Dealer'):
+            seller_type_Individual=0
+            seller_type_Trustmark_Dealer=1
+           
         else:
             seller_type_Individual=0
+            seller_type_Trustmark_Dealer=0
+            
          
         #Engine transmission
         transmission_Manual=request.form['transmission_Manual']
@@ -91,17 +98,23 @@ def predict():
         torque_log=np.log(torque)
         engine_op_number_sqaure=engine_op_number**(1/2)
         max_power_number_sqaure=max_power_number**(1/2)
+        km_driven_sqaure=km_driven**(1/2)
         Car_age_log=np.log(Car_age)
         
-        model_input = [mileage_number, km_driven_sqaure, torque_log, seats, engine_op_number_sqaure, max_power_number_sqaure,
-                       Car_age_log, owner, fuel_Diesel, fuel_LPG, fuel_Petrol, seller_type_Individual, transmission_Manual]
+        model_input=[mileage_number, km_driven_sqaure, torque_log, seats, engine_op_number_sqaure, max_power_number_sqaure,
+                       Car_age_log, owner, fuel_Diesel, fuel_LPG, fuel_Petrol, seller_type_Individual,seller_type_Trustmark_Dealer, transmission_Manual]
             
+        np_array=np.asarray(model_input)
+        model_input=np_array.reshape(1,-1)
+        
         prediction=model.predict(model_input)
-        output=round(prediction[0],2)
+    
+        #output=round(prediction[0],2)
+        output=np.exp(prediction)
         if output<0:
             return render_template('index.html',prediction_texts="Sorry you cannot sell this car")
         else:
-            return render_template('index.html',prediction_text="You Can Sell The Car at {}".format(output))
+            return render_template('index.html',prediction_text="You Can Sell The Car at Rs. {}".format(output))
     else:
         return render_template('index.html')
 
