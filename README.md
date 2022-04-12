@@ -48,7 +48,8 @@ The app is deployed using Heroku.
   
 ## 4. Deployment
   The model is deployed using Flask and Heroku
-  Please refer following blog on how to deploy a model using Heroku:-
+  Please refer to the following blog on how to deploy a model using Heroku:-
+  https://parisrohan.medium.com/how-to-deploy-an-application-using-heroku-94a2fbeac08c
   
   
   
