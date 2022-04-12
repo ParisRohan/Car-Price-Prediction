@@ -11,14 +11,14 @@
 
     <div style="color:blue">
         <form action="{{ url_for('predict')}}" method="post">
-            <h2>Car Price Prediction</h2>
-            <h3>In which year did you buy the car ?</h3> <input id="first" name="year" type="number ">
-            <h3>How Many Kilometers Drived?</h3><input id="third" name="km_driven" required="required">
-            <h3>What is the average mileage?</h3><input id="third" name="mileage_number" required="required">
-            <h3>What is the torque?</h3><input id="third" name="torque" required="required">
-            <h3>What is the max output of the engine?</h3><input id="third" name="engine_op_number" required="required">
-            <h3>What is the max power of the engine?</h3><input id="third" name="max_power_number" required="required">
-            <h3>How many seats does the vehicle have?</h3><input id="third" name="seats" required="required">      
+            <h2>Vehicle Price Prediction by Rohan Paris</h2>
+            <h3>In which year did you buy this vehicle ?</h3> <input id="first" name="year" type="number ">
+            <h3>What is the total distance (in KM) that the vehicle has travelled ?</h3><input id="third" name="km_driven" required="required" type="number">
+            <h3>What is the average mileage of this vehicle?</h3><input id="third" name="mileage_number" required="required" type="number">
+            <h3>What is the torque (in NM)?</h3><input id="third" name="torque" required="required" type="number">
+            <h3>What is the max output of the engine (in CC)?</h3><input id="third" name="engine_op_number" required="required" type="number">
+            <h3>What is the max power of the engine (in BHP)?</h3><input id="third" name="max_power_number" required="required" type="number">
+            <h3>How many seats does the vehicle have?</h3><input id="third" name="seats" required="required" type="number">      
             <h3>How many owners previously had this car?</h3><br><select id="research" name="owner" required="required">
                 <option value="First Owner">First Owner</option>
                 <option value="Second Owner">Second Owner</option>

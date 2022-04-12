@@ -117,12 +117,12 @@ def predict():
         
         prediction=model.predict(model_input)
     
-        #output=round(prediction[0],2)
+        #convert log output back to normal
         output=np.exp(prediction)
         if output<0:
-            return render_template('index.html',prediction_texts="Sorry you cannot sell this car")
+            return render_template('index.html',prediction_texts="Sorry you cannot sell this car :(  ")
         else:
-            return render_template('index.html',prediction_text="You Can Sell The Car at Rs. {}".format(output))
+            return render_template('index.html',prediction_text="You Can Sell The Car at Rs. {} :)  ".format(output))
     else:
         return render_template('index.html')
 
