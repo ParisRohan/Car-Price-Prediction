@@ -1,18 +1,24 @@
-from flask import Flask, render_template, request
-import jsonify
+from flask import Flask, render_template, request, jsonify
 import requests
 import pickle
 import numpy as np
 import sklearn
-app = Flask(__name__)
+from flask_cors import cross_origin
+
+
+app = Flask(__name__, template_folder="templates")
 model = pickle.load(open('carprice_xgb.pkl', 'rb'))
 print("Model Loaded")
+
+
 @app.route('/',methods=['GET'])
+@cross_origin()
 def Home():
     return render_template('index.html')
 
 
-@app.route("/predict", methods=['POST'])
+@app.route("/predict", methods=['GET','POST'])
+@cross_origin()
 def predict():     
     
     if request.method == 'POST':
@@ -94,12 +100,14 @@ def predict():
         else:
             transmission_Manual=0
         
+        
         #Feature Transformation
         torque_log=np.log(torque)
         engine_op_number_sqaure=engine_op_number**(1/2)
         max_power_number_sqaure=max_power_number**(1/2)
         km_driven_sqaure=km_driven**(1/2)
         Car_age_log=np.log(Car_age)
+        
         
         model_input=[mileage_number, km_driven_sqaure, torque_log, seats, engine_op_number_sqaure, max_power_number_sqaure,
                        Car_age_log, owner, fuel_Diesel, fuel_LPG, fuel_Petrol, seller_type_Individual,seller_type_Trustmark_Dealer, transmission_Manual]
